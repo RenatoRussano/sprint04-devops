@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/produto.css">
+  <title>Cadastrar Novo Produto</title>
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo">TAQUI</div>
+    <nav class="nav-menu">
+      <a href="home.html">início</a>
+      <a href="produto.html">novo produto</a>
+      <a href="consumidor.html">novo consumidor</a>
+      <a href="recomendacoes.html">recomendações</a>
+      <a href="historico.html">Histórico</a>
+      <img src="img/icon.png" alt="Power Off" class="power-off-icon">
+    </nav>
+  </header>
+
+  <main class="content">
+    <h1>Cadastrar novo produto</h1>
+    <form class="product-form" id="form-produto">
+
+      <!-- Mensagens de Sucesso/Erro -->
+      <p id="success-message" class="message success" style="display: none;">Produto cadastrado com sucesso!</p>
+      <p id="error-message" class="message error" style="display: none;">Ocorreu um erro ao cadastrar o produto. Tente novamente.</p>
+
+      <div class="form-group">
+        <input type="text" name="nome" placeholder="Nome do produto" required>
+      </div>
+      <div class="form-row">
+        <input type="text" name="fabricante" placeholder="Fabricante do produto" required>
+        <input type="text" name="modelo" placeholder="Modelo do produto" required>
+      </div>
+      <div class="form-row">
+        <input type="text" name="bateria" placeholder="Bateria">
+        <input type="text" name="camera" placeholder="Câmera">
+        <input type="text" name="processador" placeholder="Processador">
+      </div>
+      <div class="form-row">
+        <input type="text" name="tamanhoTela" placeholder="Tamanho da tela">
+        <input type="text" name="qualidadeTela" placeholder="Qualidade da tela"> <!-- Nome ajustado -->
+        <input type="text" name="armazenamento" placeholder="Armazenamento">
+      </div>
+      <div class="form-row">
+        <input type="text" name="memoriaRam" placeholder="Memória RAM">
+        <input type="text" name="preco" placeholder="Preço">
+        <input type="text" name="imagemUrl" placeholder="Imagem (URL)">
+      </div>
+      <div class="form-group">
+        <input type="text" name="tags" placeholder="Tags separadas por ," required>
+      </div>
+      <button type="submit" class="submit-button">Cadastrar produto</button>
+    </form>
+
+    <script>
+      // Script para enviar os dados do formulário
+      document.getElementById('form-produto').onsubmit = function (e) {
+        e.preventDefault(); // Evita o envio padrão do formulário
+
+        const formData = new FormData(e.target);
+        const data = {};
+        formData.forEach((value, key) => {
+          data[key] = value;
+        });
+
+        fetch('http://localhost:5011/adicionar-produto', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('success-message').style.display = 'block';
+            document.getElementById('error-message').style.display = 'none';
+            console.log(data);
+          })
+          .catch(error => {
+            document.getElementById('success-message').style.display = 'none';
+            document.getElementById('error-message').style.display = 'block';
+            console.error('Erro:', error);
+          });
+      };
+    </script>
+  </main>
+</body>
+</html>

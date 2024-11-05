@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulário de Consumidor e Produto</title>
+</head>
+<body>
+  <h2>Criar Consumidor</h2>
+  <form id="form-consumidor">
+    <input type="text" name="nome" placeholder="Nome" required><br>
+    <input type="number" name="idade" placeholder="Idade" required><br>
+    <input type="text" name="profissao" placeholder="Profissão" required><br>
+    <input type="text" name="faixa_salarial" placeholder="Faixa Salarial" required><br>
+    <button type="submit">Criar Consumidor</button>
+  </form>
+
+  <h2>Adicionar Produto</h2>
+  <form id="form-produto">
+    <input type="text" name="nome" placeholder="Nome do Produto" required><br>
+    <input type="text" name="fabricante" placeholder="Fabricante" required><br>
+    <input type="text" name="modelo" placeholder="Modelo" required><br>
+    <input type="text" name="bateria" placeholder="Bateria" required><br>
+    <button type="submit">Adicionar Produto</button>
+  </form>
+
+  <script>
+    // Função para enviar dados do formulário de consumidor
+    document.getElementById('form-consumidor').onsubmit = function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch('http://localhost:3000/criar-consumidor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(formData))
+      })
+        .then(response => response.text())
+        .then(data => alert(data))
+        .catch(error => console.error('Erro:', error));
+    };
+
+    // Função para enviar dados do formulário de produto
+    document.getElementById('form-produto').onsubmit = function (e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch('http://localhost:3000/adicionar-produto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(formData))
+      })
+        .then(response => response.text())
+        .then(data => alert(data))
+        .catch(error => console.error('Erro:', error));
+    };
+  </script>
+</body>
+</html>

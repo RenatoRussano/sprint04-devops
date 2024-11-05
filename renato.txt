@@ -1,0 +1,6 @@
+https://i.ibb.co/sWKy3Y7/logored.png
+
+  host: 'devops_taqui.mysql.dbaas.com.br',
+  user: 'devops_taqui',
+  password: 'Marilia23@23',
+  database: 'devops_taqui',

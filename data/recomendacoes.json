@@ -1,0 +1,36 @@
+{
+    "motivos": {
+      "profissao": {
+        "engenheiro": "Como engenheiro, sabemos que você precisa de um telefone intermediário que seja confiável e eficiente para suas atividades diárias.",
+        "professor": "Sabemos que professores valorizam telefones básicos que sejam práticos e fáceis de usar para gerenciar suas tarefas.",
+        "advogado": "Como advogado, recomendamos um telefone avançado que possa lidar com todas as suas demandas profissionais, como chamadas, e-mails, e multitarefas.",
+        "medico": "Para um médico, um telefone avançado é fundamental, com recursos como boa câmera e alta performance para uso profissional e pessoal.",
+        "desenvolvedor": "Como desenvolvedor, você precisa do melhor: um telefone de ponta com alta performance, uma tela de qualidade e um processador rápido para acompanhar seu dia a dia."
+      },
+      "ajustes": {
+        "filhos": "Sabemos que, como você tem filhos, é importante ter um telefone que permita capturar todos os momentos importantes e gerenciar as tarefas do dia a dia.",
+        "carro": "Como você trocou de carro recentemente, entendemos que o orçamento está apertado, por isso recomendamos um telefone que seja eficiente, mas acessível.",
+        "viagem": "Como você viaja anualmente, recomendamos este telefone com uma excelente câmera para capturar fotos incríveis durante suas aventuras.",
+        "poder_compra_reduzido": "Sabemos que o poder de compra está reduzido, então escolhemos um telefone que oferece o melhor custo-benefício sem comprometer a qualidade.",
+        "smartphone": "Como você já possui um smartphone recente, não há necessidade de uma recomendação agora, mas ficaremos atentos às novidades para você!"
+      },
+      "combinacoes": {
+        "filhos_viagem": "Como você tem filhos e viaja anualmente, recomendamos este telefone com uma boa câmera para capturar momentos em família e bastante espaço para armazenar suas memórias.",
+        "filhos_profissao": {
+          "engenheiro": "Como engenheiro com filhos, é essencial ter um telefone que equilibre performance e praticidade, para gerenciar tanto a vida profissional quanto a familiar.",
+          "professor": "Como professor com filhos, um telefone básico e eficiente é o ideal para manter suas tarefas em dia e capturar momentos importantes.",
+          "advogado": "Como advogado com filhos, você precisa de um telefone avançado que possa lidar com trabalho e ainda garantir boas fotos da família.",
+          "medico": "Como médico com filhos, um telefone com alta performance e uma boa câmera é essencial para equilibrar sua vida pessoal e profissional.",
+          "desenvolvedor": "Como desenvolvedor com filhos, um telefone de ponta é essencial para garantir que você tenha o melhor desempenho, mesmo com um orçamento ajustado."
+        },
+        "viagem_profissao": {
+          "engenheiro": "Como engenheiro que adora viajar, recomendamos este telefone intermediário com uma boa câmera, perfeito para capturar fotos incríveis sem comprometer a eficiência.",
+          "professor": "Para um professor que viaja, um telefone básico com boa bateria e uma câmera funcional é o suficiente para registrar momentos especiais.",
+          "advogado": "Como advogado que viaja, você precisa de um telefone avançado com ótima câmera e capacidade de armazenamento para suas viagens.",
+          "medico": "Para um médico que viaja, um telefone avançado com uma excelente câmera é essencial para capturar fotos e manter-se conectado.",
+          "desenvolvedor": "Como desenvolvedor que viaja, você precisa de um telefone de ponta, com uma tela vibrante e um processador rápido, perfeito para uso intenso e fotografia."
+        }
+      }
+    }
+  }
+  

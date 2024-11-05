@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/recomendacoes.css">
+  <title>Recomendações</title>
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo">TAQUI</div>
+    <nav class="nav-menu">
+      <a href="home.html">início</a>
+      <a href="produto.html">novo produto</a>
+      <a href="consumidor.html">novo consumidor</a>
+      <a href="recomendacoes.html">recomendações</a>
+      <a href="historico.html">Histórico</a>
+      <img src="img/icon.png" alt="Power Off" class="power-off-icon">
+    </nav>
+  </header>
+
+  <main class="content">
+    <h1>Recomendações</h1>
+    <div class="recomendacao-container">
+      <div class="form-group">
+        <select id="consumidor-lista" class="consumer-select">
+          <!-- A lista de consumidores será carregada aqui -->
+        </select>
+        <button class="recomendar-button" onclick="fazerRecomendacao()">Recomendar</button>
+      </div>
+
+      <div class="resultado">
+        <div class="consumidor-info">
+          <img src="img/consumer-placeholder.jpg" alt="Foto do Consumidor" class="consumer-image">
+          <div class="consumidor-detalhes">
+            <p class="titulo">Consumidor:</p>
+            <p class="detalhes" id="consumidor-detalhes"></p>
+            <p class="titulo">Resumo:</p>
+            <p class="detalhes resumo-texto" id="resumo-texto"></p>
+          </div>
+        </div>
+
+        <div class="produto-info">
+          <img src="img/product-placeholder.jpg" alt="Imagem do Produto" class="product-image">
+          <div class="produto-detalhes">
+            <p class="titulo">Produto recomendado:</p>
+            <p class="detalhes" id="produto-detalhes"></p>
+            <p class="titulo">Motivo da recomendação:</p>
+            <p class="detalhes motivo-texto" id="motivo-texto"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Carregar consumidores na lista
+    async function carregarConsumidores() {
+      try {
+        const response = await fetch('http://localhost:5016/consumidores');
+        const consumidores = await response.json();
+        const select = document.getElementById('consumidor-lista');
+
+        consumidores.forEach(consumidor => {
+          const option = document.createElement('option');
+          option.value = consumidor.id;
+          option.textContent = consumidor.nome;
+          select.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar consumidores:', error);
+      }
+    }
+
+    // Fazer a recomendação
+    async function fazerRecomendacao() {
+      const consumidorId = document.getElementById('consumidor-lista').value;
+      if (!consumidorId) {
+        alert('Por favor, selecione um consumidor.');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:5017/recomendar', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ consumidorId })
+        });
+        const recomendacao = await response.json();
+
+        // Atualizar os detalhes do consumidor e do produto na tela
+        document.getElementById('consumidor-detalhes').textContent = 
+          `Nome: ${recomendacao.consumidor.nome}, Idade: ${recomendacao.consumidor.idade} anos, Profissão: ${recomendacao.consumidor.profissao}`;
+        document.getElementById('resumo-texto').textContent = recomendacao.consumidor.resumo;
+        document.getElementById('produto-detalhes').textContent = recomendacao.produtoDetalhes;
+        document.getElementById('motivo-texto').textContent = recomendacao.motivo;
+      } catch (error) {
+        console.error('Erro ao fazer recomendação:', error);
+      }
+    }
+
+    // Carregar consumidores ao iniciar
+    carregarConsumidores();
+  </script>
+</body>
+</html>

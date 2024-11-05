@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/historico.css">
+  <title>Histórico de Recomendações</title>
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo">TAQUI</div>
+    <nav class="nav-menu">
+      <a href="home.html">início</a>
+      <a href="produto.html">novo produto</a>
+      <a href="consumidor.html">novo consumidor</a>
+      <a href="recomendacoes.html">recomendações</a>
+      <a href="historico.html">Histórico</a>
+      <img src="img/icon.png" alt="Power Off" class="power-off-icon">
+    </nav>
+  </header>
+
+  <main class="content">
+    <h1>Histórico de Recomendações</h1>
+    <div class="tabela-container">
+      <table class="tabela-historico">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Consumidor</th>
+            <th>Produto</th>
+            <th>Data</th>
+            <th>Motivo</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-corpo">
+          <!-- Dados serão preenchidos dinamicamente -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <script>
+    // Função para buscar e exibir as recomendações
+    async function buscarRecomendacoes() {
+      try {
+        const response = await fetch('http://localhost:5014/historico-recomendacoes');
+        const recomendacoes = await response.json();
+
+        const tabelaCorpo = document.getElementById('tabela-corpo');
+        tabelaCorpo.innerHTML = ''; // Limpar a tabela antes de adicionar novos dados
+
+        recomendacoes.forEach(rec => {
+          const linha = document.createElement('tr');
+          linha.innerHTML = `
+            <td>${rec.id}</td>
+            <td>${rec.consumidor}</td>
+            <td>${rec.produto}</td>
+            <td>${new Date(rec.data_recomendacao).toLocaleString()}</td>
+            <td>${rec.motivo_recomendacao ? rec.motivo_recomendacao : 'Sem motivo especificado'}</td>
+          `;
+          tabelaCorpo.appendChild(linha);
+        });
+      } catch (error) {
+        console.error('Erro ao buscar recomendações:', error);
+      }
+    }
+
+    // Atualizar a tabela a cada 10 segundos
+    setInterval(buscarRecomendacoes, 10000);
+    // Buscar as recomendações ao carregar a página
+    buscarRecomendacoes();
+  </script>
+</body>
+</html>

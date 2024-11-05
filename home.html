@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/content.css">
+  <title>Home - Lista de Produtos e Consumidores</title>
+  <style>
+    .editable {
+      background-color: #f9f9f9;
+      border: 1px solid #ccc;
+      padding: 4px;
+    }
+    .action-buttons {
+      display: flex;
+      gap: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header class="main-header">
+    <div class="logo">TAQUI</div>
+    <nav class="nav-menu">
+      <a href="index.html">início</a>
+      <a href="produto.html">novo produto</a>
+      <a href="consumidor.html">novo consumidor</a>
+      <a href="recomendacoes.html">recomendações</a>
+      <a href="historico.html">Histórico</a>
+    </nav>
+  </header>
+
+  <main class="content">
+    <h1>Lista de Produtos</h1>
+    <table class="tabela-produtos">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Fabricante</th>
+          <th>Modelo</th>
+          <th>Preço</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-produtos-corpo">
+        <!-- Dados dos produtos serão preenchidos dinamicamente -->
+      </tbody>
+    </table>
+
+    <h1>Lista de Consumidores</h1>
+    <table class="tabela-consumidores">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Idade</th>
+          <th>Profissão</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody id="tabela-consumidores-corpo">
+        <!-- Dados dos consumidores serão preenchidos dinamicamente -->
+      </tbody>
+    </table>
+  </main>
+
+  <script>
+    // Função para carregar produtos
+    async function carregarProdutos() {
+      try {
+        const response = await fetch('http://localhost:5016/produtos');
+        const produtos = await response.json();
+
+        const tabelaCorpo = document.getElementById('tabela-produtos-corpo');
+        tabelaCorpo.innerHTML = '';
+
+        produtos.forEach(prod => {
+          const linha = document.createElement('tr');
+          linha.innerHTML = `
+            <td>${prod.id}</td>
+            <td contenteditable="false" class="produto-nome">${prod.nome}</td>
+            <td contenteditable="false" class="produto-fabricante">${prod.fabricante}</td>
+            <td contenteditable="false" class="produto-modelo">${prod.modelo}</td>
+            <td contenteditable="false" class="produto-preco">${prod.preco}</td>
+            <td class="action-buttons">
+              <button onclick="habilitarEdicao(this)">Editar</button>
+              <button onclick="salvarEdicao(${prod.id}, this)" style="display: none;">Salvar</button>
+              <button onclick="cancelarEdicao(this)" style="display: none;">Cancelar</button>
+              <button onclick="apagarProduto(${prod.id})">Deletar</button>
+            </td>
+          `;
+          tabelaCorpo.appendChild(linha);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar produtos:', error);
+      }
+    }
+
+    // Função para carregar consumidores
+    async function carregarConsumidores() {
+      try {
+        const response = await fetch('http://localhost:5016/consumidores');
+        const consumidores = await response.json();
+
+        const tabelaCorpo = document.getElementById('tabela-consumidores-corpo');
+        tabelaCorpo.innerHTML = '';
+
+        consumidores.forEach(cons => {
+          const linha = document.createElement('tr');
+          linha.innerHTML = `
+            <td>${cons.id}</td>
+            <td contenteditable="false" class="consumidor-nome">${cons.nome}</td>
+            <td contenteditable="false" class="consumidor-idade">${cons.idade}</td>
+            <td contenteditable="false" class="consumidor-profissao">${cons.profissao}</td>
+            <td class="action-buttons">
+              <button onclick="habilitarEdicaoConsumidor(this)">Editar</button>
+              <button onclick="salvarEdicaoConsumidor(${cons.id}, this)" style="display: none;">Salvar</button>
+              <button onclick="cancelarEdicaoConsumidor(this)" style="display: none;">Cancelar</button>
+              <button onclick="apagarConsumidor(${cons.id})">Deletar</button>
+            </td>
+          `;
+          tabelaCorpo.appendChild(linha);
+        });
+      } catch (error) {
+        console.error('Erro ao carregar consumidores:', error);
+      }
+    }
+
+    // Função para habilitar edição de produto
+    function habilitarEdicao(botaoEditar) {
+      const linha = botaoEditar.closest('tr');
+      linha.querySelectorAll('[contenteditable]').forEach(celula => {
+        celula.contentEditable = 'true';
+        celula.classList.add('editable');
+      });
+      botaoEditar.style.display = 'none';
+      linha.querySelector('button:nth-child(2)').style.display = 'inline'; // Botão Salvar
+      linha.querySelector('button:nth-child(3)').style.display = 'inline'; // Botão Cancelar
+    }
+
+    // Função para habilitar edição de consumidor
+    function habilitarEdicaoConsumidor(botaoEditar) {
+      const linha = botaoEditar.closest('tr');
+      linha.querySelectorAll('[contenteditable]').forEach(celula => {
+        celula.contentEditable = 'true';
+        celula.classList.add('editable');
+      });
+      botaoEditar.style.display = 'none';
+      linha.querySelector('button:nth-child(2)').style.display = 'inline'; // Botão Salvar
+      linha.querySelector('button:nth-child(3)').style.display = 'inline'; // Botão Cancelar
+    }
+
+    // Função para salvar edição de produto
+    async function salvarEdicao(id, botaoSalvar) {
+      const linha = botaoSalvar.closest('tr');
+      const nome = linha.querySelector('.produto-nome').innerText;
+      const fabricante = linha.querySelector('.produto-fabricante').innerText;
+      const modelo = linha.querySelector('.produto-modelo').innerText;
+      const preco = linha.querySelector('.produto-preco').innerText;
+
+      try {
+        const response = await fetch(`http://localhost:5016/editar-produto/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome, fabricante, modelo, preco })
+        });
+
+        if (!response.ok) throw new Error('Erro ao atualizar produto.');
+
+        alert('Produto atualizado com sucesso!');
+        cancelarEdicao(botaoSalvar); // Desabilitar edição após salvar
+      } catch (error) {
+        console.error('Erro ao atualizar o produto:', error);
+        alert('Ocorreu um erro ao salvar as alterações.');
+      }
+    }
+
+    // Função para salvar edição de consumidor
+    async function salvarEdicaoConsumidor(id, botaoSalvar) {
+      const linha = botaoSalvar.closest('tr');
+      const nome = linha.querySelector('.consumidor-nome').innerText;
+      const idade = linha.querySelector('.consumidor-idade').innerText;
+      const profissao = linha.querySelector('.consumidor-profissao').innerText;
+
+      try {
+        const response = await fetch(`http://localhost:5016/editar-consumidor/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nome, idade, profissao })
+        });
+
+        if (!response.ok) throw new Error('Erro ao atualizar consumidor.');
+
+        alert('Consumidor atualizado com sucesso!');
+        cancelarEdicaoConsumidor(botaoSalvar); // Desabilitar edição após salvar
+      } catch (error) {
+        console.error('Erro ao atualizar o consumidor:', error);
+        alert('Ocorreu um erro ao salvar as alterações.');
+      }
+    }
+
+    // Funções para cancelar edição
+    function cancelarEdicao(botaoCancelar) {
+      const linha = botaoCancelar.closest('tr');
+      linha.querySelectorAll('[contenteditable]').forEach(celula => {
+        celula.contentEditable = 'false';
+        celula.classList.remove('editable');
+      });
+      linha.querySelector('button:nth-child(1)').style.display = 'inline'; // Botão Editar
+      linha.querySelector('button:nth-child(2)').style.display = 'none'; // Botão Salvar
+      linha.querySelector('button:nth-child(3)').style.display = 'none'; // Botão Cancelar
+      carregarProdutos(); // Recarregar produtos para desfazer alterações não salvas
+    }
+
+    function cancelarEdicaoConsumidor(botaoCancelar) {
+      const linha = botaoCancelar.closest('tr');
+      linha.querySelectorAll('[contenteditable]').forEach(celula => {
+        celula.contentEditable = 'false';
+        celula.classList.remove('editable');
+      });
+      linha.querySelector('button:nth-child(1)').style.display = 'inline'; // Botão Editar
+      linha.querySelector('button:nth-child(2)').style.display = 'none'; // Botão Salvar
+      linha.querySelector('button:nth-child(3)').style.display = 'none'; // Botão Cancelar
+      carregarConsumidores(); // Recarregar consumidores para desfazer alterações não salvas
+    }
+
+    // Funções para deletar produtos e consumidores
+    async function apagarProduto(id) {
+      if (confirm('Tem certeza que deseja apagar este produto?')) {
+        try {
+          await fetch(`http://localhost:5016/apagar-produto/${id}`, { method: 'DELETE' });
+          alert('Produto apagado com sucesso!');
+          carregarProdutos();
+        } catch (error) {
+          console.error('Erro ao apagar produto:', error);
+        }
+      }
+    }
+
+    async function apagarConsumidor(id) {
+      if (confirm('Tem certeza que deseja apagar este consumidor?')) {
+        try {
+          await fetch(`http://localhost:5016/apagar-consumidor/${id}`, { method: 'DELETE' });
+          alert('Consumidor apagado com sucesso!');
+          carregarConsumidores();
+        } catch (error) {
+          console.error('Erro ao apagar consumidor:', error);
+        }
+      }
+    }
+
+    // Carregar os produtos e consumidores ao carregar a página
+    carregarProdutos();
+    carregarConsumidores();
+  </script>
+</body>
+</html>
