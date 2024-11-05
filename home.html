@@ -30,6 +30,11 @@
     </nav>
   </header>
 
+  <section class="link-section">
+    <a href="relacao.html" target="_blank" class="link-button">Acessar página de relacionamentos</a>
+  </section>
+ 
+
   <main class="content">
     <h1>Lista de Produtos</h1>
     <table class="tabela-produtos">
@@ -69,7 +74,7 @@
     // Função para carregar produtos
     async function carregarProdutos() {
       try {
-        const response = await fetch('http://localhost:5016/produtos');
+        const response = await fetch('http://localhost:5020/produtos');
         const produtos = await response.json();
 
         const tabelaCorpo = document.getElementById('tabela-produtos-corpo');

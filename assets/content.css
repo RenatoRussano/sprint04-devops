@@ -155,3 +155,22 @@ td button:hover {
 .cancel-button {
   background-color: #ddd;
 }
+
+.link-section {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.link-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.link-button:hover {
+  background-color: #0056b3;
+}

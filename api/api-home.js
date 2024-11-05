@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
-const port = 5016; // Porta ajustada para a API
+const port = 5099; // Porta ajustada para a API
 
 app.use(cors());
 app.use(bodyParser.json());
