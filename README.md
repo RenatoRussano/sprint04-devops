@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 # Sistema de Recomendação e Relacionamentos
 
 Este projeto é um sistema de recomendação e gerenciamento de relacionamentos entre consumidores e produtos. Ele inclui várias APIs em Node.js, páginas HTML com estilos personalizados, e uma estrutura de banco de dados para armazenar consumidores, produtos, e recomendações.
